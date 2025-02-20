@@ -1,0 +1,277 @@
+{
+  "start": "incoming_call",
+  "steps": {
+    "incoming_call": {
+      "text": "Thank you for calling Southern Smiles, this is [Name]. Who do I have the pleasure of speaking with?",
+      "choices": [
+        {
+          "text": "Patient provides name",
+          "next": "patient_type"
+        }
+      ]
+    },
+    "patient_type": {
+      "text": "Thank you [Pt Name]. Are you a new or existing patient of the practice?",
+      "choices": [
+        {
+          "text": "New Patient",
+          "next": "new_patient"
+        },
+        {
+          "text": "Existing Patient",
+          "next": "existing_patient"
+        }
+      ]
+    },
+    "new_patient": {
+      "text": "Great! We always welcome new patients to our practice. Hey [Pt name], is the number you're calling from ending in XXXX, the best number to reach you, just in case the call drops?",
+      "choices": [
+        {
+          "text": "Yes",
+          "next": "record_np_log"
+        },
+        {
+          "text": "No",
+          "next": "patient_pushback"
+        }
+      ]
+    },
+    "existing_patient": {
+      "text": "Welcome back [Pt Name], how can I help you today?",
+      "choices": [
+        {
+          "text": "Insurance Question",
+          "next": "insurance_question"
+        },
+        {
+          "text": "Price Shopper",
+          "next": "price_shopper"
+        },
+        {
+          "text": "Hours Question",
+          "next": "hours_question"
+        }
+      ]
+    },
+    "record_np_log": {
+      "text": "Thank you for that [Pt Name]. How can I help you today?",
+      "choices": [
+        {
+          "text": "Continue",
+          "next": "existing_patient"
+        }
+      ]
+    },
+    "patient_pushback": {
+      "text": "I'm sorry [Pt Name], Our phone system is over the internet, and sometimes it just drops, and we wanna be able to make sure we can reach you back.",
+      "choices": [
+        {
+          "text": "Patient agrees",
+          "next": "record_np_log"
+        },
+        {
+          "text": "Patient continues to push back",
+          "next": "apologize_move_on"
+        }
+      ]
+    },
+    "apologize_move_on": {
+      "text": "I apologize for the inconvenience. Let's move on with how I can help you today.",
+      "choices": [
+        {
+          "text": "Continue",
+          "next": "existing_patient"
+        }
+      ]
+    },
+    "insurance_question": {
+      "text": "That's a great question! We do have a lot of patients in our practice with various insurance plans. To better assist you, can I ask you how you found out about us?",
+      "choices": [
+        {
+          "text": "Patient provides information",
+          "next": "insurance_followup"
+        }
+      ]
+    },
+    "insurance_followup": {
+      "text": "Thank you [Pt name]. To better answer your insurance questions, can you tell me more about what you're looking for? Just an exam and cleaning, an emergency, or is there something else?",
+      "choices": [
+        {
+          "text": "Routine Exam and Cleaning",
+          "next": "routine_exam"
+        },
+        {
+          "text": "Emergency",
+          "next": "emergency"
+        },
+        {
+          "text": "Something Else",
+          "next": "something_else"
+        }
+      ]
+    },
+    "routine_exam": {
+      "text": "I'm happy to hear you are interested in making sure your teeth and gums are healthy. Most insurance plans pay 100% of new patient exams and cleanings at our office. I can see you as soon as [earliest available appointment]. Would that work for you?",
+      "choices": [
+        {
+          "text": "Yes",
+          "next": "schedule_appointment"
+        },
+        {
+          "text": "No, I just want cleaning",
+          "next": "explain_exam_requirement"
+        }
+      ]
+    },
+    "emergency": {
+      "text": "I'm sorry to hear that you are having this emergency. We need to get you in as soon as possible for Dr. Shkally to take a look. For us to do an exam and x-ray and tell you the best way to take care of that, it would be $37 out of pocket. We can see you as soon as [earliest available emergency slot]. Will that work for you?",
+      "choices": [
+        {
+          "text": "Yes",
+          "next": "schedule_emergency"
+        },
+        {
+          "text": "No",
+          "next": "explain_emergency_options"
+        }
+      ]
+    },
+    "something_else": {
+      "text": "I understand. Could you please provide more details about what you're looking for?",
+      "choices": [
+        {
+          "text": "Patient explains",
+          "next": "custom_response"
+        }
+      ]
+    },
+    "schedule_appointment": {
+      "text": "Great! Let me grab a few things from you to finalize your profile, then I can make you an appointment. Is that okay?",
+      "choices": [
+        {
+          "text": "Yes",
+          "next": "create_profile"
+        },
+        {
+          "text": "No",
+          "next": "end_call"
+        }
+      ]
+    },
+    "explain_exam_requirement": {
+      "text": "I understand. In Arizona, we are required by law to perform a full exam with x-rays before we can provide a cleaning. This ensures we provide the best care possible. Would you like to proceed with scheduling a full exam and cleaning?",
+      "choices": [
+        {
+          "text": "Yes",
+          "next": "schedule_appointment"
+        },
+        {
+          "text": "No",
+          "next": "end_call"
+        }
+      ]
+    },
+    "schedule_emergency": {
+      "text": "Alright, let's get you scheduled right away. Can I get some information from you to create your profile?",
+      "choices": [
+        {
+          "text": "Yes",
+          "next": "create_profile"
+        },
+        {
+          "text": "No",
+          "next": "end_call"
+        }
+      ]
+    },
+    "explain_emergency_options": {
+      "text": "I understand your concern. Even if your insurance doesn't cover it fully, it's important to address dental emergencies quickly. We can still see you for $37, which includes the exam and x-ray. Dr. Shkally can provide antibiotics if needed and help manage your pain. Would you like to reconsider scheduling an appointment?",
+      "choices": [
+        {
+          "text": "Yes",
+          "next": "schedule_emergency"
+        },
+        {
+          "text": "No",
+          "next": "offer_followup"
+        }
+      ]
+    },
+    "create_profile": {
+      "text": "Great, let me create your profile. Can you please provide your date of birth, home address, and email address?",
+      "choices": [
+        {
+          "text": "Patient provides information",
+          "next": "confirm_appointment"
+        }
+      ]
+    },
+    "confirm_appointment": {
+      "text": "Thank you for that information. Your appointment is set for [appointment time]. I'm going to text you 3 forms to fill out. Please complete them as soon as possible to make your check-in process quick. If you have any trouble with the forms, please let me know. Is there anything else I can help you with today?",
+      "choices": [
+        {
+          "text": "No, that's all",
+          "next": "end_call"
+        },
+        {
+          "text": "Yes, I have a question",
+          "next": "additional_questions"
+        }
+      ]
+    },
+    "offer_followup": {
+      "text": "I understand you want to explore other options. Would it be okay if I give you a call by the end of the day to see if you were able to get everything taken care of?",
+      "choices": [
+        {
+          "text": "Yes",
+          "next": "schedule_followup"
+        },
+        {
+          "text": "No",
+          "next": "end_call"
+        }
+      ]
+    },
+    "schedule_followup": {
+      "text": "Great, I'll make a note to call you back. Is there a specific time that works best for you?",
+      "choices": [
+        {
+          "text": "Patient provides time",
+          "next": "end_call"
+        }
+      ]
+    },
+    "additional_questions": {
+      "text": "Of course, I'm here to help. What other questions do you have?",
+      "choices": [
+        {
+          "text": "Patient asks question",
+          "next": "answer_additional_question"
+        }
+      ]
+    },
+    "answer_additional_question": {
+      "text": "I hope that answers your question. Is there anything else I can help you with?",
+      "choices": [
+        {
+          "text": "Yes",
+          "next": "additional_questions"
+        },
+        {
+          "text": "No",
+          "next": "end_call"
+        }
+      ]
+    },
+    "end_call": {
+      "text": "Thank you for calling Southern Smiles. We look forward to seeing you soon. Have a great day!",
+      "choices": [
+        {
+          "text": "Start Over",
+          "next": "incoming_call"
+        }
+      ]
+    }
+  }
+}
+
