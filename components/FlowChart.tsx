@@ -1,72 +1,23 @@
 "use client"
 
-import { useState } from "react"
 import { ChevronRight, ChevronLeft, RotateCcw, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useFlowStore } from "@/store/useFlowStore"
 import flowData from "@/data/flow-data.json"
-import { FlowData, Step } from "@/lib/types/flow"
+import { FlowData } from "@/lib/types/flow"
 
 export default function FlowChart() {
-  const typedFlowData = flowData as FlowData
-  const [currentStep, setCurrentStep] = useState<string>(typedFlowData.start)
-  const [history, setHistory] = useState<string[]>([])
-
-  // Handle the user's choice
-  const handleChoice = (nextStep: string) => {
-    // Check if the next step exists
-    if (!typedFlowData.steps[nextStep]) {
-      return; // Don't navigate to non-existent steps
-    }
-    
-    // Save the current step to the history
-    setHistory([...history, currentStep])
-    
-    // Move to the next step
-    setCurrentStep(nextStep)
-  }
-
-  const handleBack = () => {
-    if (history.length > 0) {
-      // Create a copy of history to work with
-      const newHistory = [...history]
-      const prevStep = newHistory.pop()
-      
-      // Update history state
-      setHistory(newHistory)
-      
-      // Move back to previous step
-      if (prevStep && typedFlowData.steps[prevStep]) {
-        setCurrentStep(prevStep)
-      } else {
-        // If previous step doesn't exist anymore, go to start
-        setCurrentStep(typedFlowData.start)
-      }
-    }
-  }
-
-  const handleReset = () => {
-    setCurrentStep(typedFlowData.start)
-    setHistory([])
-  }
-
-  // Safely get the current step, or default to a placeholder
-  const getCurrentStep = (): Step => {
-    const step = typedFlowData.steps[currentStep];
-    if (!step) {
-      return {
-        text: `This path (${currentStep}) is not yet implemented.`,
-        choices: [
-          {
-            text: "Go back",
-            next: history.length > 0 ? history[history.length - 1] : typedFlowData.start
-          }
-        ]
-      };
-    }
-    return step;
-  };
+  const {
+    currentStep,
+    handleChoice,
+    goBack,
+    reset,
+    getCurrentStep,
+    history
+  } = useFlowStore()
 
   const step = getCurrentStep();
+  const typedFlowData = flowData as FlowData;
 
   return (
     <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
@@ -102,13 +53,13 @@ export default function FlowChart() {
       <div className="flex justify-between mt-6">
         <Button 
           variant="outline" 
-          onClick={handleBack} 
+          onClick={goBack} 
           disabled={history.length === 0}
         >
           <ChevronLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
-        <Button variant="outline" onClick={handleReset}>
+        <Button variant="outline" onClick={reset}>
           <RotateCcw className="mr-2 h-4 w-4" />
           Start Over
         </Button>

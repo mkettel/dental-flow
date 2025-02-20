@@ -36,23 +36,6 @@
         }
       ]
     },
-    "existing_patient": {
-      "text": "Welcome back [Pt Name], how can I help you today?",
-      "choices": [
-        {
-          "text": "Insurance Question",
-          "next": "insurance_question"
-        },
-        {
-          "text": "Price Shopper",
-          "next": "price_shopper"
-        },
-        {
-          "text": "Hours Question",
-          "next": "hours_question"
-        }
-      ]
-    },
     "record_np_log": {
       "text": "Thank you for that [Pt Name]. How can I help you today?",
       "choices": [
@@ -84,8 +67,51 @@
         }
       ]
     },
+    "existing_patient": {
+      "text": "Welcome back [Pt Name], how can I help you today?",
+      "choices": [
+        {
+          "text": "Insurance Question",
+          "next": "insurance_question"
+        },
+        {
+          "text": "Price Shopper",
+          "next": "price_shopper"
+        },
+        {
+          "text": "Hours Question",
+          "next": "hours_question"
+        }
+      ]
+    },
     "insurance_question": {
       "text": "That's a great question! We do have a lot of patients in our practice with various insurance plans. To better assist you, can I ask you how you found out about us?",
+      "choices": [
+        {
+          "text": "Access/AHCCCS/Medicaid",
+          "next": "access_insurance"
+        },
+        {
+          "text": "Delta/Cigna/Private Insurance",
+          "next": "private_insurance"
+        },
+        {
+          "text": "Other / No Insurance",
+          "next": "other_insurance"
+        }
+      ]
+    },
+    "access_insurance": {
+      "text": "That's a great question! We do have a lot of patients in our practice that have Access. They choose to come to us because we can see them quickly and offer quality care at affordable prices. First, can I ask you how you found out about us?",
+      "choices": [
+        {
+          "text": "Patient provides information",
+          "next": "insurance_followup"
+        }
+      ]
+    },
+    "private_insurance": {
+      "text": "That's a great question! We do have a lot of patients in our practice that have that insurance. Each plan is different. So, to better assist you, can I ask you how you found out about us?",
       "choices": [
         {
           "text": "Patient provides information",
@@ -111,15 +137,15 @@
       ]
     },
     "routine_exam": {
-      "text": "I'm happy to hear you are interested in making sure your teeth and gums are healthy. Most insurance plans pay 100% of new patient exams and cleanings at our office. I can see you as soon as [earliest available appointment]. Would that work for you?",
+      "text": "I'm Happy to hear you are interested in making sure your teeth and gums are healthy. Unfortunately, Access in Arizona, does not cover cleanings. Even routine ones. What I can do, is have you use our office savings plan, which gives you a full exam with all the x-rays you need, along with 2 cleanings for the year, for only $150. Would you be interested in that?",
       "choices": [
         {
           "text": "Yes",
           "next": "schedule_appointment"
         },
         {
-          "text": "No, I just want cleaning",
-          "next": "explain_exam_requirement"
+          "text": "No",
+          "next": "offer_alternative_cleaning"
         }
       ]
     },
@@ -131,26 +157,74 @@
           "next": "schedule_emergency"
         },
         {
-          "text": "No",
+          "text": "No, I thought insurance covered that",
           "next": "explain_emergency_options"
         }
       ]
     },
-    "something_else": {
-      "text": "I understand. Could you please provide more details about what you're looking for?",
-      "choices": [
-        {
-          "text": "Patient explains",
-          "next": "custom_response"
-        }
-      ]
-    },
-    "schedule_appointment": {
-      "text": "Great! Let me grab a few things from you to finalize your profile, then I can make you an appointment. Is that okay?",
+    "explain_emergency_options": {
+      "text": "Access does cover emergencies, but it's very limited. Like I said, we have a lot of access patients that come to our practice, because we can see them quickly, and provide them with quality work at affordable prices. I recommend you come in and worse case, it's 37$ and Dr. Shakally can get you antibiotics and get you out of pain, until you can get in somewhere that is able to better utilize your insurance than we can. We can see you as soon as [earliest available emergency slot]. Does that work for you?",
       "choices": [
         {
           "text": "Yes",
-          "next": "create_profile"
+          "next": "schedule_emergency"
+        },
+        {
+          "text": "No, want to call around",
+          "next": "offer_followup"
+        }
+      ]
+    },
+    "offer_followup": {
+      "text": "That's completely understandable to want to find somewhere that is free. With this being an emergency, you want to take care of it quickly before it becomes a bigger issue. Is it okay to give you a call by end of day to see, if you were able to get everything taken care of?",
+      "choices": [
+        {
+          "text": "Yes",
+          "next": "schedule_followup"
+        },
+        {
+          "text": "No",
+          "next": "end_call_emergency"
+        }
+      ]
+    },
+    "end_call_emergency": {
+      "text": "That is completely understandable [Pt Name]. Please don't hesitate to reach back if you still need any help.",
+      "choices": [
+        {
+          "text": "End Call",
+          "next": "record_np_log"
+        }
+      ]
+    },
+    "schedule_followup": {
+      "text": "Great. I will reach back to you then",
+      "choices": [
+        {
+          "text": "Continue",
+          "next": "record_np_log"
+        }
+      ]
+    },
+    "offer_alternative_cleaning": {
+      "text": "That's completely understandable, we can also offer you our one time Exam, x-ray cleaning fee of $116. We can see you as soon as [earliest prophy appointment]. Will that work for you?",
+      "choices": [
+        {
+          "text": "Yes",
+          "next": "schedule_appointment"
+        },
+        {
+          "text": "No",
+          "next": "offer_followup_cleaning"
+        }
+      ]
+    },
+    "offer_followup_cleaning": {
+      "text": "That's completely understandable that you want somewhere that is cheaper. The fact that you are looking to take care of your teeth is important to us. Since we truly believe we are the best place for new patients on Access looking for cleanings, is it okay if I reach back out to you by the end of the day to see if make sure you got in somewhere?",
+      "choices": [
+        {
+          "text": "Yes",
+          "next": "schedule_followup"
         },
         {
           "text": "No",
@@ -158,12 +232,12 @@
         }
       ]
     },
-    "explain_exam_requirement": {
-      "text": "I understand. In Arizona, we are required by law to perform a full exam with x-rays before we can provide a cleaning. This ensures we provide the best care possible. Would you like to proceed with scheduling a full exam and cleaning?",
+    "schedule_appointment": {
+      "text": "Awesome! Let me grab a few things from you to finalize your profile, then I can make you an appointment. Is that okay?",
       "choices": [
         {
           "text": "Yes",
-          "next": "schedule_appointment"
+          "next": "create_profile"
         },
         {
           "text": "No",
@@ -172,7 +246,7 @@
       ]
     },
     "schedule_emergency": {
-      "text": "Alright, let's get you scheduled right away. Can I get some information from you to create your profile?",
+      "text": "Awesome! Let me grab a few things from you to finalize your profile, then I can confirm your appointment. Is that okay?",
       "choices": [
         {
           "text": "Yes",
@@ -181,19 +255,6 @@
         {
           "text": "No",
           "next": "end_call"
-        }
-      ]
-    },
-    "explain_emergency_options": {
-      "text": "I understand your concern. Even if your insurance doesn't cover it fully, it's important to address dental emergencies quickly. We can still see you for $37, which includes the exam and x-ray. Dr. Shkally can provide antibiotics if needed and help manage your pain. Would you like to reconsider scheduling an appointment?",
-      "choices": [
-        {
-          "text": "Yes",
-          "next": "schedule_emergency"
-        },
-        {
-          "text": "No",
-          "next": "offer_followup"
         }
       ]
     },
@@ -207,59 +268,20 @@
       ]
     },
     "confirm_appointment": {
-      "text": "Thank you for that information. Your appointment is set for [appointment time]. I'm going to text you 3 forms to fill out. Please complete them as soon as possible to make your check-in process quick. If you have any trouble with the forms, please let me know. Is there anything else I can help you with today?",
+      "text": "Okay we have your appointment set up for [appointment time]. I'm going to text you 3 forms to your phone. Fill them out as soon as possible. That way when you come in, it's a very quick process. If you have any trouble with them, please let me know.",
       "choices": [
         {
-          "text": "No, that's all",
-          "next": "end_call"
-        },
-        {
-          "text": "Yes, I have a question",
-          "next": "additional_questions"
-        }
-      ]
-    },
-    "offer_followup": {
-      "text": "I understand you want to explore other options. Would it be okay if I give you a call by the end of the day to see if you were able to get everything taken care of?",
-      "choices": [
-        {
-          "text": "Yes",
-          "next": "schedule_followup"
-        },
-        {
-          "text": "No",
+          "text": "Continue",
           "next": "end_call"
         }
       ]
     },
-    "schedule_followup": {
-      "text": "Great, I'll make a note to call you back. Is there a specific time that works best for you?",
+    "something_else": {
+      "text": "I understand. Could you please provide more details about what you're looking for?",
       "choices": [
         {
-          "text": "Patient provides time",
-          "next": "end_call"
-        }
-      ]
-    },
-    "additional_questions": {
-      "text": "Of course, I'm here to help. What other questions do you have?",
-      "choices": [
-        {
-          "text": "Patient asks question",
-          "next": "answer_additional_question"
-        }
-      ]
-    },
-    "answer_additional_question": {
-      "text": "I hope that answers your question. Is there anything else I can help you with?",
-      "choices": [
-        {
-          "text": "Yes",
-          "next": "additional_questions"
-        },
-        {
-          "text": "No",
-          "next": "end_call"
+          "text": "Patient explains",
+          "next": "custom_response"
         }
       ]
     },
@@ -274,4 +296,3 @@
     }
   }
 }
-
