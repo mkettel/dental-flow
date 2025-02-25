@@ -1,17 +1,7 @@
 // store/useFlowStore.ts
 import { create } from 'zustand'
 import flowData from '@/data/flow-data.json'
-import { FlowData, Step } from '@/lib/types/flow'
-
-interface PatientInfo {
-  name: string;
-  phoneNumber: string;
-  insuranceType?: 'access' | 'delta' | 'cigna' | 'other' | null;
-  appointmentType?: 'routine' | 'emergency' | 'other';
-  dateOfBirth?: string;
-  address?: string;
-  email?: string;
-}
+import { FlowData, Step, PatientInfo } from '@/lib/types/flow'
 
 interface FlowState {
   currentStep: string;
@@ -25,6 +15,8 @@ interface FlowState {
   // Navigation helpers
   handleChoice: (nextStep: string) => void;
   getCurrentStep: () => Step;
+  // Data collection
+  setFieldValue: (field: string, value: string) => void;
 }
 
 export const useFlowStore = create<FlowState>((set, get) => ({
@@ -33,6 +25,13 @@ export const useFlowStore = create<FlowState>((set, get) => ({
   patientInfo: {
     name: '',
     phoneNumber: '',
+    referralSource: '',
+    visitReason: '',
+    insuranceType: null,
+    appointmentType: undefined,
+    dateOfBirth: '',
+    address: '',
+    email: '',
   },
 
   setCurrentStep: (step: string) => set({ currentStep: step }),
@@ -55,11 +54,25 @@ export const useFlowStore = create<FlowState>((set, get) => ({
     patientInfo: {
       name: '',
       phoneNumber: '',
+      referralSource: '',
+      visitReason: '',
+      insuranceType: null,
+      appointmentType: undefined,
+      dateOfBirth: '',
+      address: '',
+      email: '',
     },
   }),
 
   updatePatientInfo: (info: Partial<PatientInfo>) => set(state => ({
     patientInfo: { ...state.patientInfo, ...info }
+  })),
+
+  setFieldValue: (field: string, value: string) => set(state => ({
+    patientInfo: { 
+      ...state.patientInfo, 
+      [field]: value 
+    }
   })),
 
   handleChoice: (nextStep: string) => set(state => {

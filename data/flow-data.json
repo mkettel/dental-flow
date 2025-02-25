@@ -3,9 +3,48 @@
   "steps": {
     "incoming_call": {
       "text": "Thank you for calling Southern Smiles, this is [Name]. Who do I have the pleasure of speaking with?",
+      "dataCollection": {
+        "field": "name",
+        "type": "text",
+        "label": "Patient Name",
+        "placeholder": "Enter patient's full name",
+        "required": true
+      },
       "choices": [
         {
           "text": "Patient provides name",
+          "next": "patient_type"
+        }
+      ]
+    },
+    "collect_name": {
+      "text": "Please enter the patient's name:",
+      "dataCollection": {
+        "field": "name",
+        "type": "text",
+        "label": "Patient Name",
+        "placeholder": "Enter patient's full name",
+        "required": true
+      },
+      "choices": [
+        {
+          "text": "Continue",
+          "next": "collect_phone"
+        }
+      ]
+    },
+    "collect_phone": {
+      "text": "Please confirm the patient's phone number:",
+      "dataCollection": {
+        "field": "phoneNumber",
+        "type": "phone",
+        "label": "Phone Number",
+        "placeholder": "(555) 555-5555",
+        "required": true
+      },
+      "choices": [
+        {
+          "text": "Continue",
           "next": "patient_type"
         }
       ]
@@ -25,10 +64,17 @@
     },
     "new_patient": {
       "text": "Great! We always welcome new patients to our practice. Hey [Pt name], is the number you're calling from ending in XXXX, the best number to reach you, just in case the call drops?",
+      "dataCollection": {
+        "field": "phoneNumber",
+        "type": "phone",
+        "label": "Phone Number",
+        "placeholder": "(555) 555-5555",
+        "required": true
+      },
       "choices": [
         {
           "text": "Yes",
-          "next": "record_np_log"
+          "next": "collect_referral"
         },
         {
           "text": "No",
@@ -36,8 +82,38 @@
         }
       ]
     },
+    "collect_referral": {
+      "text": "We'd love to know how you heard about Southern Smiles. This helps us better serve our community.",
+      "dataCollection": {
+        "field": "referralSource",
+        "type": "select",
+        "label": "How did you hear about us?",
+        "options": [
+          "Google Search",
+          "Energize",
+          "Direct Mailer",
+          "Internal",
+          "Walk-in",
+          "Other"
+        ],
+        "required": true
+      },
+      "choices": [
+        {
+          "text": "Continue",
+          "next": "record_np_log"
+        }
+      ]
+    },
     "record_np_log": {
-      "text": "Thank you for that [Pt Name]. How can I help you today?",
+      "text": "Thank you for that information. How can I help you today?",
+      "dataCollection": {
+        "field": "visitReason",
+        "type": "textarea",
+        "label": "Reason for Visit",
+        "placeholder": "Please enter the patient's reason for calling",
+        "required": true
+      },
       "choices": [
         {
           "text": "Continue",
@@ -50,7 +126,7 @@
       "choices": [
         {
           "text": "Patient agrees",
-          "next": "record_np_log"
+          "next": "collect_referral"
         },
         {
           "text": "Patient continues to push back",
@@ -63,7 +139,7 @@
       "choices": [
         {
           "text": "Continue",
-          "next": "existing_patient"
+          "next": "collect_referral"
         }
       ]
     },
@@ -260,9 +336,47 @@
     },
     "create_profile": {
       "text": "Great, let me create your profile. Can you please provide your date of birth, home address, and email address?",
+      "dataCollection": {
+        "field": "dateOfBirth",
+        "type": "date",
+        "label": "Date of Birth",
+        "required": true
+      },
       "choices": [
         {
-          "text": "Patient provides information",
+          "text": "Continue to Address",
+          "next": "collect_address"
+        }
+      ]
+    },
+    "collect_address": {
+      "text": "Please provide the patient's home address:",
+      "dataCollection": {
+        "field": "address",
+        "type": "text",
+        "label": "Home Address",
+        "placeholder": "Enter full address",
+        "required": true
+      },
+      "choices": [
+        {
+          "text": "Continue to Email",
+          "next": "collect_email"
+        }
+      ]
+    },
+    "collect_email": {
+      "text": "Finally, please provide the patient's email address:",
+      "dataCollection": {
+        "field": "email",
+        "type": "email",
+        "label": "Email Address",
+        "placeholder": "patient@example.com",
+        "required": true
+      },
+      "choices": [
+        {
+          "text": "Complete Profile",
           "next": "confirm_appointment"
         }
       ]
