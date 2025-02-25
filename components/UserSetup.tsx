@@ -26,7 +26,7 @@ export default function UserSetup() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle className="text-center">Welcome to Southern Smiles Call Flow</CardTitle>
+        <CardTitle className="text-center text-xl">Welcome to Southern Smiles Call Flow</CardTitle>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent>
