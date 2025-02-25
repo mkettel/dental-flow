@@ -41,6 +41,7 @@ export interface PatientInfo {
   dateOfBirth?: string;
   address?: string;
   email?: string;
+  callDate: string; // Date of the call
 }
 
 export interface UserInfo {

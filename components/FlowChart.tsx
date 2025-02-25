@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronRight, ChevronLeft, RotateCcw, AlertTriangle } from "lucide-react"
+import { ChevronRight, ChevronLeft, RotateCcw, AlertTriangle, Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -17,6 +17,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useFlowStore } from "@/store/useFlowStore"
 import flowData from "@/data/flow-data.json"
 import { FlowData } from "@/lib/types/flow"
+import ExportCallsButton from "./ExportCallsButton"
 
 export default function FlowChart() {
   const {
@@ -28,7 +29,8 @@ export default function FlowChart() {
     history,
     patientInfo,
     userInfo,
-    setFieldValue
+    setFieldValue,
+    finishCall
   } = useFlowStore()
   
   const [tempFieldValues, setTempFieldValues] = useState<Record<string, string>>({})
@@ -92,8 +94,27 @@ export default function FlowChart() {
   // Apply replacements to the step text
   const displayText = replacePlaceholders(step.text);
 
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'long',
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
+  // Check if we're at the end of the call flow
+  const isEndOfCall = currentStep === "end_call" || currentStep === "end_call_emergency";
+
   return (
     <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
+      {/* Export Call Data UI */}
+      <div className="mb-6">
+        <ExportCallsButton />
+      </div>
+
       {step.text && (
         <div className="mb-6">
           {!typedFlowData.steps[currentStep] && (
@@ -103,6 +124,23 @@ export default function FlowChart() {
             </div>
           )}
           <h2 className="text-2xl font-semibold">{displayText}</h2>
+        </div>
+      )}
+
+      {/* End of call message and finish button */}
+      {isEndOfCall && (
+        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">
+          <h3 className="font-medium text-green-800 mb-2">End of Call</h3>
+          <p className="text-green-700 mb-4">
+            This call has been completed. You can now save this call to your records and start a new one.
+          </p>
+          <Button 
+            className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700" 
+            onClick={finishCall}
+          >
+            <Save className="h-4 w-4" />
+            Finish & Save Call
+          </Button>
         </div>
       )}
 
@@ -221,10 +259,21 @@ export default function FlowChart() {
           <ChevronLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
-        <Button variant="outline" onClick={reset}>
-          <RotateCcw className="mr-2 h-4 w-4" />
-          Start Over
-        </Button>
+        {isEndOfCall ? (
+          <Button 
+            variant="default" 
+            onClick={finishCall}
+            className="bg-green-600 hover:bg-green-700"
+          >
+            <Save className="mr-2 h-4 w-4" />
+            Finish Call
+          </Button>
+        ) : (
+          <Button variant="outline" onClick={reset}>
+            <RotateCcw className="mr-2 h-4 w-4" />
+            Start Over
+          </Button>
+        )}
       </div>
 
       {/* Patient Information Display */}
@@ -287,6 +336,10 @@ export default function FlowChart() {
                   <dd className="text-sm">{patientInfo.address}</dd>
                 </div>
               )}
+              <div className="py-2 flex justify-between">
+                <dt className="font-medium text-sm">Call Date:</dt>
+                <dd className="text-sm">{formatDate(patientInfo.callDate)}</dd>
+              </div>
             </dl>
           </CardContent>
         </Card>

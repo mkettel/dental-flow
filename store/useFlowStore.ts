@@ -2,6 +2,7 @@
 import { create } from 'zustand'
 import flowData from '@/data/flow-data.json'
 import { FlowData, Step, PatientInfo, UserInfo } from '@/lib/types/flow'
+import { useCallHistoryStore } from '@/store/useCallHistoryStore'
 
 interface FlowState {
   currentStep: string;
@@ -15,6 +16,7 @@ interface FlowState {
   reset: () => void;
   updatePatientInfo: (info: Partial<PatientInfo>) => void;
   setUserInfo: (info: UserInfo) => void;
+  finishCall: () => void;
   // Navigation helpers
   handleChoice: (nextStep: string) => void;
   getCurrentStep: () => Step;
@@ -35,6 +37,7 @@ export const useFlowStore = create<FlowState>((set, get) => ({
     dateOfBirth: '',
     address: '',
     email: '',
+    callDate: new Date().toISOString().split('T')[0],
   },
   userInfo: {
     name: '',
@@ -55,6 +58,23 @@ export const useFlowStore = create<FlowState>((set, get) => ({
     return state;
   }),
 
+  // Finish and save the current call
+  finishCall: () => {
+    const state = get();
+    
+    // Only save calls that have at least a name or phone number
+    if (state.patientInfo.name || state.patientInfo.phoneNumber) {
+      // Get the add call function from the history store
+      const { addCall } = useCallHistoryStore.getState();
+      
+      // Add the current patient info to history, including the handler's info
+      addCall({ ...state.patientInfo }, state.userInfo);
+      
+      // Reset for the next call
+      state.reset();
+    }
+  },
+
   reset: () => set(state => ({
     currentStep: (flowData as FlowData).start,
     history: [],
@@ -68,6 +88,7 @@ export const useFlowStore = create<FlowState>((set, get) => ({
       dateOfBirth: '',
       address: '',
       email: '',
+      callDate: new Date().toISOString().split('T')[0],
     },
     // Don't reset the user info when starting over with a new patient
     userInfo: state.userInfo,
