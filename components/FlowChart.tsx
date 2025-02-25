@@ -53,6 +53,43 @@ export default function FlowChart() {
     // Navigate to next step
     handleChoice(nextStep)
   }
+  
+  // Function to replace placeholders in text with actual patient info
+  const replacePlaceholders = (text: string) => {
+    if (!text) return '';
+    
+    let processedText = text;
+    
+    // Replace [Pt Name] or [Pt name] with the patient's name
+    if (patientInfo.name) {
+      processedText = processedText.replace(/\[Pt Name\]/gi, patientInfo.name);
+    }
+
+    // Replace [Pt Phone] or [Pt phone] with the patient's phone number
+    if (patientInfo.phoneNumber) {
+      processedText = processedText.replace(/\[Pt Phone\]/gi, patientInfo.phoneNumber);
+    }
+    
+    // Replace [appointment time] placeholder (could be implemented later with actual scheduling)
+    processedText = processedText.replace(/\[appointment time\]/gi, "your scheduled time");
+    
+    // Replace [earliest available emergency slot] placeholder
+    processedText = processedText.replace(
+      /\[earliest available emergency slot\]/gi, 
+      "our next available emergency slot"
+    );
+    
+    // Replace [earliest prophy appointment] placeholder
+    processedText = processedText.replace(
+      /\[earliest prophy appointment\]/gi, 
+      "our next available appointment"
+    );
+    
+    return processedText;
+  };
+
+  // Apply replacements to the step text
+  const displayText = replacePlaceholders(step.text);
 
   return (
     <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
@@ -64,7 +101,7 @@ export default function FlowChart() {
               <span className="text-sm font-medium">Incomplete path</span>
             </div>
           )}
-          <h2 className="text-2xl font-semibold">{step.text}</h2>
+          <h2 className="text-2xl font-semibold">{displayText}</h2>
         </div>
       )}
 
@@ -153,20 +190,25 @@ export default function FlowChart() {
       )}
       
       <div className="space-y-4">
-        {step.choices && step.choices.map((choice, index) => (
-          <Button 
-            key={index} 
-            onClick={() => handleChoiceWithData(choice.next)} 
-            className="w-full justify-start"
-            disabled={!typedFlowData.steps[choice.next]}
-          >
-            <ChevronRight className="mr-2 h-4 w-4" />
-            {choice.text}
-            {!typedFlowData.steps[choice.next] && (
-              <span className="ml-auto text-xs text-zinc-500">(Not implemented)</span>
-            )}
-          </Button>
-        ))}
+        {step.choices && step.choices.map((choice, index) => {
+          // Apply replacements to choice text as well
+          const choiceText = replacePlaceholders(choice.text);
+          
+          return (
+            <Button 
+              key={index} 
+              onClick={() => handleChoiceWithData(choice.next)} 
+              className="w-full justify-start"
+              disabled={!typedFlowData.steps[choice.next]}
+            >
+              <ChevronRight className="mr-2 h-4 w-4" />
+              {choiceText}
+              {!typedFlowData.steps[choice.next] && (
+                <span className="ml-auto text-xs text-zinc-500">(Not implemented)</span>
+              )}
+            </Button>
+          );
+        })}
       </div>
       
       <div className="flex justify-between mt-6">
@@ -186,7 +228,7 @@ export default function FlowChart() {
 
       {/* Patient Information Display */}
       {(patientInfo.name || patientInfo.phoneNumber || patientInfo.referralSource || patientInfo.visitReason) && (
-        <Card className="mt-6">
+        <Card className="mt-6 border-t-2 border-blue-200">
           <CardContent className="pt-6">
             <h3 className="text-lg font-medium mb-2">Patient Information</h3>
             <dl className="divide-y">
