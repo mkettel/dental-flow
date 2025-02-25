@@ -42,3 +42,7 @@ export interface PatientInfo {
   address?: string;
   email?: string;
 }
+
+export interface UserInfo {
+  name: string;
+}

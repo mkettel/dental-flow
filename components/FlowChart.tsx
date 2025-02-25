@@ -27,6 +27,7 @@ export default function FlowChart() {
     getCurrentStep,
     history,
     patientInfo,
+    userInfo,
     setFieldValue
   } = useFlowStore()
   
@@ -60,14 +61,14 @@ export default function FlowChart() {
     
     let processedText = text;
     
+    // Replace [Name] with the user's (receptionist's) name
+    if (userInfo.name) {
+      processedText = processedText.replace(/\[Name\]/gi, userInfo.name);
+    }
+    
     // Replace [Pt Name] or [Pt name] with the patient's name
     if (patientInfo.name) {
       processedText = processedText.replace(/\[Pt Name\]/gi, patientInfo.name);
-    }
-
-    // Replace [Pt Phone] or [Pt phone] with the patient's phone number
-    if (patientInfo.phoneNumber) {
-      processedText = processedText.replace(/\[Pt Phone\]/gi, patientInfo.phoneNumber);
     }
     
     // Replace [appointment time] placeholder (could be implemented later with actual scheduling)
@@ -228,7 +229,7 @@ export default function FlowChart() {
 
       {/* Patient Information Display */}
       {(patientInfo.name || patientInfo.phoneNumber || patientInfo.referralSource || patientInfo.visitReason) && (
-        <Card className="mt-6 border-t-2 border-blue-200">
+        <Card className="mt-6">
           <CardContent className="pt-6">
             <h3 className="text-lg font-medium mb-2">Patient Information</h3>
             <dl className="divide-y">
@@ -290,6 +291,13 @@ export default function FlowChart() {
           </CardContent>
         </Card>
       )}
+      
+      {/* User (Receptionist) Info Display */}
+      <div className="mt-6 text-right">
+        <span className="text-sm text-muted-foreground">
+          Call handler: <span className="font-medium">{userInfo.name}</span>
+        </span>
+      </div>
     </div>
   )
 }

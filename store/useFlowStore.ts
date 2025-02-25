@@ -1,17 +1,20 @@
 // store/useFlowStore.ts
 import { create } from 'zustand'
 import flowData from '@/data/flow-data.json'
-import { FlowData, Step, PatientInfo } from '@/lib/types/flow'
+import { FlowData, Step, PatientInfo, UserInfo } from '@/lib/types/flow'
 
 interface FlowState {
   currentStep: string;
   history: string[];
   patientInfo: PatientInfo;
+  userInfo: UserInfo;
+  isUserSetup: boolean;
   // Actions
   setCurrentStep: (step: string) => void;
   goBack: () => void;
   reset: () => void;
   updatePatientInfo: (info: Partial<PatientInfo>) => void;
+  setUserInfo: (info: UserInfo) => void;
   // Navigation helpers
   handleChoice: (nextStep: string) => void;
   getCurrentStep: () => Step;
@@ -33,6 +36,10 @@ export const useFlowStore = create<FlowState>((set, get) => ({
     address: '',
     email: '',
   },
+  userInfo: {
+    name: '',
+  },
+  isUserSetup: false,
 
   setCurrentStep: (step: string) => set({ currentStep: step }),
   
@@ -48,7 +55,7 @@ export const useFlowStore = create<FlowState>((set, get) => ({
     return state;
   }),
 
-  reset: () => set({
+  reset: () => set(state => ({
     currentStep: (flowData as FlowData).start,
     history: [],
     patientInfo: {
@@ -62,11 +69,19 @@ export const useFlowStore = create<FlowState>((set, get) => ({
       address: '',
       email: '',
     },
-  }),
+    // Don't reset the user info when starting over with a new patient
+    userInfo: state.userInfo,
+    isUserSetup: state.isUserSetup,
+  })),
 
   updatePatientInfo: (info: Partial<PatientInfo>) => set(state => ({
     patientInfo: { ...state.patientInfo, ...info }
   })),
+
+  setUserInfo: (info: UserInfo) => set({
+    userInfo: info,
+    isUserSetup: true
+  }),
 
   setFieldValue: (field: string, value: string) => set(state => ({
     patientInfo: { 
