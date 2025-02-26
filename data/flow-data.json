@@ -6,7 +6,7 @@
       "dataCollection": {
         "field": "name",
         "type": "text",
-        "label": "Patient Name",
+        "label": "Patient Name (Ensure Correct Spelling)",
         "placeholder": "Enter patient's full name",
         "required": true
       },
@@ -22,7 +22,7 @@
       "dataCollection": {
         "field": "name",
         "type": "text",
-        "label": "Patient Name",
+        "label": "Patient Name (Ensure Correct Spelling)",
         "placeholder": "Enter patient's full name",
         "required": true
       },
@@ -63,7 +63,7 @@
       ]
     },
     "new_patient": {
-      "text": "Great! We always welcome new patients to our practice. Hey [Pt name], is the number you're calling from ending in XXXX, the best number to reach you, just in case the call drops?",
+      "text": "Great! We always welcome new patinets to our practice. Hey [Pt name] what is the best number to reach you back in case the phone call drops?",
       "dataCollection": {
         "field": "phoneNumber",
         "type": "phone",
@@ -74,7 +74,7 @@
       "choices": [
         {
           "text": "Yes",
-          "next": "collect_referral"
+          "next": "existing_patient"
         },
         {
           "text": "No",
@@ -83,7 +83,7 @@
       ]
     },
     "collect_referral": {
-      "text": "We'd love to know how you heard about Southern Smiles. This helps us better serve our community.",
+      "text": "Thank you [Pt Name], how did you find out about our office?",
       "dataCollection": {
         "field": "referralSource",
         "type": "select",
@@ -144,7 +144,7 @@
       ]
     },
     "existing_patient": {
-      "text": "Welcome back [Pt Name], how can I help you today?",
+      "text": "Thank you for that [Pt Name], how can I help you today?",
       "choices": [
         {
           "text": "Insurance Question",
@@ -161,7 +161,7 @@
       ]
     },
     "insurance_question": {
-      "text": "That's a great question! We do have a lot of patients in our practice with various insurance plans. To better assist you, can I ask you how you found out about us?",
+      "text": "**[INTERNAL]** Please select the patients insurance type",
       "choices": [
         {
           "text": "Access/AHCCCS/Medicaid",
@@ -179,15 +179,43 @@
     },
     "access_insurance": {
       "text": "That's a great question! We do have a lot of patients in our practice that have Access. They choose to come to us because we can see them quickly and offer quality care at affordable prices. First, can I ask you how you found out about us?",
+      "dataCollection": {
+        "field": "referralSource",
+        "type": "select",
+        "label": "How did you hear about us?",
+        "options": [
+          "Google Search",
+          "Energize",
+          "Direct Mailer",
+          "Internal",
+          "Walk-in",
+          "Other"
+        ],
+        "required": true
+      },
       "choices": [
         {
-          "text": "Patient provides information",
+          "text": "Continue",
           "next": "insurance_followup"
         }
       ]
     },
     "private_insurance": {
       "text": "That's a great question! We do have a lot of patients in our practice that have that insurance. Each plan is different. So, to better assist you, can I ask you how you found out about us?",
+      "dataCollection": {
+        "field": "referralSource",
+        "type": "select",
+        "label": "How did you hear about us?",
+        "options": [
+          "Google Search",
+          "Energize",
+          "Direct Mailer",
+          "Internal",
+          "Walk-in",
+          "Other"
+        ],
+        "required": true
+      },
       "choices": [
         {
           "text": "Patient provides information",
@@ -403,7 +431,7 @@
       "text": "Thank you for calling Southern Smiles. We look forward to seeing you soon. Have a great day!",
       "choices": [
         {
-          "text": "Start Over",
+          "text": "",
           "next": "incoming_call"
         }
       ]
